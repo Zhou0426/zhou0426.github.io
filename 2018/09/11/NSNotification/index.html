@@ -112,25 +112,25 @@
 
 
 
-  <meta name="description" content="前言iOS国际化,分为两种：  1.随系统语言切换 2.随用户选择切换  NSLocalizedString  key：字符集标识 tableName：strings文件的文件名，默认就是我们设置的Localizable bundle：默认是mainBundle comment：对key的注解，一般传空字符串  随系统语言切换a)project -&amp;gt; info -&amp;gt; Localizat">
-<meta name="keywords" content="Swift,LocalizedString">
+  <meta name="description" content="观察者模式 （Observer） 指一个对象在状态变化的时候会通知另一个对象。参与者并不需要知道其他对象的具体是干什么的。这是一种降低耦合度的设计。常见的使用方法是观察者注册监听，然后在状态改变的时候，所有观察者们都会收到通知。在 MVC 里，观察者模式意味着需要允许 Model 对象和 View 对象进行交流，而不能有直接的关联。  Cocoa两种观察者模式:  Key-Value Observ">
+<meta name="keywords" content="Swift,NSNotification,NotificationCenter">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Swift Localized String">
-<meta property="og:url" content="http://yoursite.com/2018/09/10/SwiftLocalizedString/index.html">
+<meta property="og:title" content="NSNotification">
+<meta property="og:url" content="http://yoursite.com/2018/09/11/NSNotification/index.html">
 <meta property="og:site_name" content="Shuai">
-<meta property="og:description" content="前言iOS国际化,分为两种：  1.随系统语言切换 2.随用户选择切换  NSLocalizedString  key：字符集标识 tableName：strings文件的文件名，默认就是我们设置的Localizable bundle：默认是mainBundle comment：对key的注解，一般传空字符串  随系统语言切换a)project -&amp;gt; info -&amp;gt; Localizat">
+<meta property="og:description" content="观察者模式 （Observer） 指一个对象在状态变化的时候会通知另一个对象。参与者并不需要知道其他对象的具体是干什么的。这是一种降低耦合度的设计。常见的使用方法是观察者注册监听，然后在状态改变的时候，所有观察者们都会收到通知。在 MVC 里，观察者模式意味着需要允许 Model 对象和 View 对象进行交流，而不能有直接的关联。  Cocoa两种观察者模式:  Key-Value Observ">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-10T14:14:35.264Z">
+<meta property="og:updated_time" content="2018-09-11T12:02:55.589Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Swift Localized String">
-<meta name="twitter:description" content="前言iOS国际化,分为两种：  1.随系统语言切换 2.随用户选择切换  NSLocalizedString  key：字符集标识 tableName：strings文件的文件名，默认就是我们设置的Localizable bundle：默认是mainBundle comment：对key的注解，一般传空字符串  随系统语言切换a)project -&amp;gt; info -&amp;gt; Localizat">
+<meta name="twitter:title" content="NSNotification">
+<meta name="twitter:description" content="观察者模式 （Observer） 指一个对象在状态变化的时候会通知另一个对象。参与者并不需要知道其他对象的具体是干什么的。这是一种降低耦合度的设计。常见的使用方法是观察者注册监听，然后在状态改变的时候，所有观察者们都会收到通知。在 MVC 里，观察者模式意味着需要允许 Model 对象和 View 对象进行交流，而不能有直接的关联。  Cocoa两种观察者模式:  Key-Value Observ">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/10/SwiftLocalizedString/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/11/NSNotification/"/>
 
 
 
@@ -140,7 +140,7 @@
   };
 </script>
 
-  <title>Swift Localized String | Shuai</title>
+  <title>NSNotification | Shuai</title>
   
 
 
@@ -301,7 +301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/10/SwiftLocalizedString/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/NSNotification/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zhou Shuai">
@@ -318,7 +318,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Swift Localized String
+          <h1 class="post-title" itemprop="name headline">NSNotification
               
             
           </h1>
@@ -343,7 +343,7 @@
                 
               
 
-              <time title="创建时间：2018-09-10 11:48:25 / 修改时间：23:14:35" itemprop="dateCreated datePublished" datetime="2018-09-10T11:48:25+09:00">2018-09-10</time>
+              <time title="创建时间：2018-09-11 16:39:25 / 修改时间：21:02:55" itemprop="dateCreated datePublished" datetime="2018-09-11T16:39:25+09:00">2018-09-11</time>
             
 
             
@@ -399,26 +399,18 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>iOS国际化,分为两种：</p>
+        <h1 id="观察者模式-（Observer）"><a href="#观察者模式-（Observer）" class="headerlink" title="观察者模式 （Observer）"></a>观察者模式 （Observer）</h1><blockquote>
+<p>指一个对象在状态变化的时候会通知另一个对象。参与者并不需要知道其他对象的具体是干什么的。这是一种降低耦合度的设计。常见的使用方法是观察者注册监听，然后在状态改变的时候，所有观察者们都会收到通知。<br>在 MVC 里，观察者模式意味着需要允许 Model 对象和 View 对象进行交流，而不能有直接的关联。</p>
+</blockquote>
+<p>Cocoa两种观察者模式:</p>
 <ul>
-<li>1.随系统语言切换</li>
-<li>2.随用户选择切换</li>
+<li>Key-Value Observing (KVO)</li>
+<li>Notification</li>
 </ul>
-<p>NSLocalizedString</p>
-<ul>
-<li>key：字符集标识</li>
-<li>tableName：strings文件的文件名，默认就是我们设置的Localizable</li>
-<li>bundle：默认是mainBundle</li>
-<li>comment：对key的注解，一般传空字符串</li>
-</ul>
-<h2 id="随系统语言切换"><a href="#随系统语言切换" class="headerlink" title="随系统语言切换"></a>随系统语言切换</h2><p>a)project -&gt; info -&gt; Localizations 点击加号新增，默认是英文，增加需要的语言<br>b)工程中新建Strings File文件，命名为Localizable（如果是自动跟随系统的话，必须这个名字<br>c)选中新建的strings文件，点击右边栏的Localization选项,勾选国际化的语言，此时strings文件将会变成可展开的文件，其中包含不同语言的strings文件<br>d)在strings文件中添加字符集（等号之前是key，之后是value），如下<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"text1"</span> = <span class="string">"Hello World"</span>;</span><br><span class="line"><span class="string">"text2"</span> = <span class="string">"Test Code"</span>;</span><br></pre></td></tr></table></figure></p>
-<p>d)storyboard同理，点击右边栏的Localization选项，即可实现国际化<br>e)InfoPlist的国际化，新建一个名为InfoPlist的strings文件，然后在添加不同语言版本的字符表</p>
-<h2 id="随用户选择切换-stackoverflow"><a href="#随用户选择切换-stackoverflow" class="headerlink" title="随用户选择切换 stackoverflow"></a>随用户选择切换 <a href="https://stackoverflow.com/questions/42673150/change-app-localization-based-on-user-selection" target="_blank" rel="noopener">stackoverflow</a></h2><p>It has a list of all locales that are supported, for example:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> supportedLocales = ['en-<span class="type">US'</span>, 'en-<span class="type">CA'</span>, 'fr', 'es-<span class="type">ES'</span>, 'es-<span class="type">MX'</span>]</span><br></pre></td></tr></table></figure>
-<p>It also stores the selected language in UserDefaults. When the selectedLocale changes, it sends a Notification, in case you want to notify your views or anything else:</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> selectedLocale: <span class="type">String</span>? &#123;</span><br><span class="line">    <span class="keyword">get</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="type">UserDefaults</span>.standard.object(forKey: <span class="type">UserDefaultsKeys</span>.selectedLocale) <span class="keyword">as</span>? <span class="type">String</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">set</span> (newLocale) &#123;</span><br><span class="line">        <span class="keyword">let</span> didChange = <span class="keyword">self</span>.selectedLocale != newLocale</span><br><span class="line">        <span class="type">UserDefaults</span>.standard.<span class="keyword">set</span>(newLocale, forKey: <span class="type">UserDefaultsKeys</span>.selectedLocale)</span><br><span class="line">        <span class="type">UserDefaults</span>.standard.synchronize()</span><br><span class="line">        <span class="keyword">if</span> didChange &#123;</span><br><span class="line">            <span class="type">NotificationCenter</span>.<span class="keyword">default</span>.post(name: <span class="type">Notification</span>.<span class="type">Name</span>.localeDidChange, object: <span class="literal">nil</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Now, in order to pull strings out of your localized.strings files, you can’t use the standard Apple methods - you have to provide your own. Use LanguageManager.shared.getString(for key:String, alt:String) to reference keys in your .strings file to pull out localized strings.</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> selectedLanguage:<span class="type">String</span>? &#123;</span><br><span class="line">    <span class="comment">//returns just the language portion of the locale - eg: 'en' from 'en-US'</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> selectedLocale = selectedLocale &#123;</span><br><span class="line">        <span class="keyword">return</span> selectedLocale.components(separatedBy: <span class="string">"-"</span>)[<span class="number">0</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getString</span><span class="params">(<span class="keyword">for</span> key:String, alt:String)</span></span> -&gt; <span class="type">String</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> val:<span class="type">String</span>? = getString(<span class="keyword">for</span>:key, language: selectedLocale)</span><br><span class="line">    <span class="keyword">if</span> val == <span class="literal">nil</span> &#123;</span><br><span class="line">        val = getString(<span class="keyword">for</span>:key, language: selectedLanguage)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> val == <span class="literal">nil</span> &#123;</span><br><span class="line">        val = getString(<span class="keyword">for</span>:key, language: <span class="string">"en"</span>) <span class="comment">//default to English</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> val = val &#123;</span><br><span class="line">        <span class="keyword">return</span> val </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>  alternate <span class="comment">//use fallback</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getString</span><span class="params">(<span class="keyword">for</span> key:String, language:String)</span></span> -&gt; <span class="type">String</span>?</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">let</span> path = <span class="type">Bundle</span>.main.path(forResource:language, ofType:<span class="string">"lproj"</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> languageBundle = <span class="type">Bundle</span>(path:path) &#123;</span><br><span class="line">        <span class="keyword">return</span> languageBundle.localizedString(<span class="keyword">for</span>: key)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="NotificationCenter-注册和响应"><a href="#NotificationCenter-注册和响应" class="headerlink" title="NotificationCenter 注册和响应"></a>NotificationCenter 注册和响应</h1><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果queue为nil，则消息是默认在post线程中同步处理，即通知的post与转发是在同一线程中</span></span><br><span class="line"><span class="type">NotificationCenter</span>.<span class="keyword">default</span>.addObserver(</span><br><span class="line">	forName: <span class="type">NSNotification</span>.<span class="type">Name</span>.<span class="type">UIApplicationDidEnterBackground</span>, object: <span class="literal">nil</span>, queue: <span class="type">OperationQueue</span>.main, using: &#123; </span><br><span class="line">		(notification) <span class="keyword">in</span></span><br><span class="line">	        <span class="built_in">print</span>(<span class="string">"Test"</span>)</span><br><span class="line">	    &#125;)</span><br><span class="line"></span><br><span class="line"><span class="type">NotificationCenter</span>.<span class="keyword">default</span>.post(name: <span class="type">NSNotification</span>.<span class="type">Name</span>.<span class="type">UIApplicationDidEnterBackground</span>, object: <span class="keyword">self</span>, userInfo: <span class="literal">nil</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="NotificationCenter-使用自定义的通知"><a href="#NotificationCenter-使用自定义的通知" class="headerlink" title="NotificationCenter 使用自定义的通知"></a>NotificationCenter 使用自定义的通知</h1><p>ViewController.swift<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> UIKit</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ViewController</span>: <span class="title">UIViewController</span> </span>&#123;</span><br><span class="line">     </span><br><span class="line">    <span class="keyword">let</span> observers = [<span class="type">TestObserver</span>(name: <span class="string">"Notification1"</span>),</span><br><span class="line">    	<span class="type">TestObserver</span>(name: <span class="string">"Notification2"</span>)]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.viewDidLoad()</span><br><span class="line">        <span class="type">NotificationCenter</span>.<span class="keyword">default</span>.post(name: <span class="type">Notification</span>.<span class="type">Name</span>(rawValue: <span class="string">"StartView"</span>), object: <span class="keyword">self</span>, </span><br><span class="line">        	userInfo: [<span class="string">"title"</span>:<span class="string">"zhou0426"</span>, <span class="string">"subTitle"</span> : <span class="number">666</span>])</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">didReceiveMemoryWarning</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">super</span>.didReceiveMemoryWarning()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>TestObserver.swift<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> UIKit</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestObserver</span>: <span class="title">NSObject</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> name:<span class="type">String</span> = <span class="string">""</span></span><br><span class="line">    <span class="keyword">init</span>(name:<span class="type">String</span>)&#123;</span><br><span class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>()</span><br><span class="line">        <span class="keyword">self</span>.name = name</span><br><span class="line">        <span class="type">NotificationCenter</span>.<span class="keyword">default</span>.addObserver(<span class="keyword">self</span>,</span><br><span class="line">	        selector:#selector(getNotification(notification:)),</span><br><span class="line">	        name: <span class="type">Notification</span>.<span class="type">Name</span>(rawValue: <span class="string">"StartView"</span>), object: <span class="literal">nil</span>)</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">getNotification</span><span class="params">(notification: Notification)</span></span> &#123;</span><br><span class="line">        <span class="keyword">let</span> info = notification.userInfo <span class="keyword">as</span>! [<span class="type">String</span>: <span class="type">AnyObject</span>]</span><br><span class="line">        <span class="keyword">let</span> title = userInfo[<span class="string">"title"</span>] <span class="keyword">as</span>! <span class="type">String</span></span><br><span class="line">        <span class="keyword">let</span> subTitle = userInfo[<span class="string">"subTitle"</span>] <span class="keyword">as</span>! <span class="type">Int</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"<span class="subst">\(name)</span>的数据是［<span class="subst">\(title)</span>,<span class="subst">\(subTitle)</span>］"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="keyword">deinit</span> &#123;</span><br><span class="line">        <span class="comment">//Remove All notification</span></span><br><span class="line">        <span class="type">NotificationCenter</span>.<span class="keyword">default</span>.removeObserver(<span class="keyword">self</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
       
     </div>
 
@@ -440,7 +432,9 @@
           
             <a href="/tags/Swift/" rel="tag"># Swift</a>
           
-            <a href="/tags/LocalizedString/" rel="tag"># LocalizedString</a>
+            <a href="/tags/NSNotification/" rel="tag"># NSNotification</a>
+          
+            <a href="/tags/NotificationCenter/" rel="tag"># NotificationCenter</a>
           
         </div>
       
@@ -453,8 +447,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/10/SwiftStringBase64/" rel="next" title="Swift String Base64">
-                <i class="fa fa-chevron-left"></i> Swift String Base64
+              <a href="/2018/09/10/NSPredicate/" rel="next" title="NSPredicate">
+                <i class="fa fa-chevron-left"></i> NSPredicate
               </a>
             
           </div>
@@ -462,10 +456,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/10/NSPredicate/" rel="prev" title="NSPredicate">
-                NSPredicate <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -611,7 +601,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#随系统语言切换"><span class="nav-number">1.1.</span> <span class="nav-text">随系统语言切换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#随用户选择切换-stackoverflow"><span class="nav-number">1.2.</span> <span class="nav-text">随用户选择切换 stackoverflow</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#观察者模式-（Observer）"><span class="nav-number">1.</span> <span class="nav-text">观察者模式 （Observer）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NotificationCenter-注册和响应"><span class="nav-number">2.</span> <span class="nav-text">NotificationCenter 注册和响应</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NotificationCenter-使用自定义的通知"><span class="nav-number">3.</span> <span class="nav-text">NotificationCenter 使用自定义的通知</span></a></li></ol></div>
             
 
           </div>
