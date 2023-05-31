@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.4.1" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.4.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.4.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.4.1" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.4.1',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    fastclick: false,
+    lazyload: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="AWS EC2Precondition: Prepare AWS EC2  Step: Install Java  1sudo yum install java -y  Install Git  1sudo yum install git -y  Install Jenkins  1234567sudo yum update -ysudo yum install java -ysudo wget">
+<meta name="keywords" content="AWS,EC2,Jenkins,CloudFront,S3,ECS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWS EC2(Jenkins) + CloudFront + S3 + ECS">
+<meta property="og:url" content="http://yoursite.com/2023/05/31/AWS-EC2-Jenkins-CloudFront-S3-ECS/index.html">
+<meta property="og:site_name" content="Shuai">
+<meta property="og:description" content="AWS EC2Precondition: Prepare AWS EC2  Step: Install Java  1sudo yum install java -y  Install Git  1sudo yum install git -y  Install Jenkins  1234567sudo yum update -ysudo yum install java -ysudo wget">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2023-05-31T09:17:47.571Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AWS EC2(Jenkins) + CloudFront + S3 + ECS">
+<meta name="twitter:description" content="AWS EC2Precondition: Prepare AWS EC2  Step: Install Java  1sudo yum install java -y  Install Git  1sudo yum install git -y  Install Jenkins  1234567sudo yum update -ysudo yum install java -ysudo wget">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2023/05/31/AWS-EC2-Jenkins-CloudFront-S3-ECS/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>AWS EC2(Jenkins) + CloudFront + S3 + ECS | Shuai</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Shuai</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2023/05/31/AWS-EC2-Jenkins-CloudFront-S3-ECS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhou Shuai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Shuai">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">AWS EC2(Jenkins) + CloudFront + S3 + ECS
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2023-05-31 16:41:47 / 修改时间：17:17:47" itemprop="dateCreated datePublished" datetime="2023-05-31T16:41:47+08:00">2023-05-31</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/AWS/" itemprop="url" rel="index"><span itemprop="name">AWS</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2023/05/31/AWS-EC2-Jenkins-CloudFront-S3-ECS/#comments" itemprop="discussionUrl">
+                
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2023/05/31/AWS-EC2-Jenkins-CloudFront-S3-ECS/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="AWS-EC2"><a href="#AWS-EC2" class="headerlink" title="AWS EC2"></a>AWS EC2</h1><h2 id="Precondition"><a href="#Precondition" class="headerlink" title="Precondition:"></a>Precondition:</h2><ul>
+<li>Prepare AWS EC2</li>
+</ul>
+<h2 id="Step"><a href="#Step" class="headerlink" title="Step:"></a>Step:</h2><ol>
+<li>Install Java</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install java -y</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Install Git</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install git -y</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>Install Jenkins</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo yum update -y</span><br><span class="line">sudo yum install java -y</span><br><span class="line">sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo</span><br><span class="line">sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io-2023.key</span><br><span class="line">sudo yum install jenkins -y</span><br><span class="line">sudo systemctl start jenkins.service</span><br><span class="line">sudo systemctl enable jenkins.service</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>Aws configure</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws configure --profile jenkins</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>Install docker and add jenkins to docker group<br>Install docker please refer to as below:<br><a href="https://docs.docker.com/engine/install/centos/" target="_blank" rel="noopener">https://docs.docker.com/engine/install/centos/</a></li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo groupadd docker</span><br><span class="line">sudo usermod -aG docker jenkins</span><br><span class="line">chmod 777 /var/run/docker.sock</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>Add aws permisson to jenkins</li>
+</ol>
+<ul>
+<li>add iam role to ec2(If use this way, we can skip No.4)</li>
+<li>use No.4’s aws configure</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo cp -r .aws /var/lib/jenkins/.aws</span><br><span class="line">sudo chown -R jenkins:jenkins .aws</span><br></pre></td></tr></table></figure>
+<h1 id="CloudFront-S3"><a href="#CloudFront-S3" class="headerlink" title="CloudFront + S3"></a>CloudFront + S3</h1><h2 id="Precondition-1"><a href="#Precondition-1" class="headerlink" title="Precondition:"></a>Precondition:</h2><ul>
+<li>Prepare CloudFront and S3</li>
+<li>Should be associate CloudFront with S3</li>
+<li>S3 need use [Static website hosting] mode</li>
+<li>S3 should be close [Block public access (bucket settings)]</li>
+<li>Add S3 bucket policy</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    "Version": "2008-10-17",</span><br><span class="line">    "Id": "PolicyForCloudFrontPrivateContent",</span><br><span class="line">    "Statement": [</span><br><span class="line">        &#123;</span><br><span class="line">            "Sid": "1",</span><br><span class="line">            "Effect": "Allow",</span><br><span class="line">            "Principal": &#123;</span><br><span class="line">                "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity xxxxxxxxxxx" # Use a CloudFront origin access identity (OAI) to access the S3 bucket.</span><br><span class="line">            &#125;,</span><br><span class="line">            "Action": "s3:GetObject",</span><br><span class="line">            "Resource": "arn:aws:s3:::xxxxxxxxx/*"</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            "Sid": "Statement1",</span><br><span class="line">            "Effect": "Allow",</span><br><span class="line">            "Principal": &#123;</span><br><span class="line">                "AWS": "arn:aws:iam::xxxxxxxxxxx:role/xxxxxxxxx" # EC2 will push static html to s3, so we need add policy for ec2</span><br><span class="line">            &#125;,</span><br><span class="line">            "Action": "s3:*",</span><br><span class="line">            "Resource": "arn:aws:s3:::xxxxxxxxx/*"</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="ECS"><a href="#ECS" class="headerlink" title="ECS"></a>ECS</h1><h2 id="Precondition-2"><a href="#Precondition-2" class="headerlink" title="Precondition:"></a>Precondition:</h2><ul>
+<li>Create Cluster</li>
+<li>Create Service</li>
+<li>Create Task</li>
+</ul>
+<h1 id="Jenkins"><a href="#Jenkins" class="headerlink" title="Jenkins"></a>Jenkins</h1><h2 id="Springboot-Pipline"><a href="#Springboot-Pipline" class="headerlink" title="Springboot Pipline"></a>Springboot Pipline</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">     agent any</span><br><span class="line">     tools &#123;</span><br><span class="line">     	jdk 'JDK1.8'</span><br><span class="line">     	gradle 'Gradle'</span><br><span class="line">     &#125;</span><br><span class="line">     parameters &#123;</span><br><span class="line">	    gitParameter branchFilter: 'origin/(.*)', defaultValue: 'develop', name: 'BRANCH', type: 'PT_BRANCH'</span><br><span class="line">	 &#125;</span><br><span class="line">     stages &#123;</span><br><span class="line">         stage('Pull source code') &#123;</span><br><span class="line">             steps &#123;</span><br><span class="line">              // Get source code from github</span><br><span class="line">              git branch: "$&#123;params.BRANCH&#125;", credentialsId: 'xxxx-backend', url: 'https://github.com/xxxx-dev/xxxxx-backend'</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         stage('Gradle build') &#123;</span><br><span class="line">             steps &#123;</span><br><span class="line">               sh label: '', script: "sed -i 's/spring.profiles.active=local/spring.profiles.active=dev/g' 'xxxx-api/src/main/resources/application.properties'"</span><br><span class="line">               sh label: '', script: 'gradle :xxxx-api:clean'</span><br><span class="line">               sh label: '', script: 'gradle :xxxx-api:build'</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">        stage('Docker build &amp; Push to ECR') &#123;</span><br><span class="line">             steps &#123;</span><br><span class="line">                 // ecr login</span><br><span class="line">                 sh "aws ecr get-login-password --region ap-northeast-1 --profile jenkins | docker login --username AWS --password-stdin xxxxxx.dkr.ecr.ap-northeast-1.amazonaws.com"</span><br><span class="line">                 // remove old images</span><br><span class="line">                 sh "docker rmi -f xxxx:v0.0.1"</span><br><span class="line">                 sh "aws ecr batch-delete-image --repository-name xxxxxxx --image-ids imageTag=latest --region ap-northeast-1"</span><br><span class="line">                 // build docker image</span><br><span class="line">                 sh "docker build -t xxxxx:v0.0.1 ./xxxxx-api "</span><br><span class="line">                 // push ecr</span><br><span class="line">                 sh " docker tag xxxxx:v0.0.1 xxxxxx.dkr.ecr.ap-northeast-1.amazonaws.com/xxxx:latest"</span><br><span class="line">                 sh " docker push xxxxxx.dkr.ecr.ap-northeast-1.amazonaws.com/xxxxx:latest"</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">        stage('Define task') &#123;</span><br><span class="line">             steps &#123;</span><br><span class="line">              sh 'aws ecs register-task-definition --family xxxx --cli-input-json file://xxxxx-api/taskDefinition.json --region ap-northeast-1'</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">	      stage('Deploy') &#123;</span><br><span class="line">	           steps &#123;</span><br><span class="line">	         	 sh 'aws ecs update-service --cluster xxxxx-cluster --service xxxxxx-service --task-definition xxxxxxx --desired-count 1'</span><br><span class="line">	         &#125;</span><br><span class="line">	     &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Frontend-Pipline"><a href="#Frontend-Pipline" class="headerlink" title="Frontend Pipline"></a>Frontend Pipline</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">pipeline &#123;</span><br><span class="line">     agent any</span><br><span class="line">     tools &#123;</span><br><span class="line">     	nodejs 'NodeJS13'</span><br><span class="line">     &#125;</span><br><span class="line">     parameters &#123;</span><br><span class="line">	    gitParameter branchFilter: 'origin/(.*)', defaultValue: 'develop', name: 'BRANCH', type: 'PT_BRANCH'</span><br><span class="line">	 &#125;</span><br><span class="line">     stages &#123;</span><br><span class="line">         stage('Pull source code') &#123;</span><br><span class="line">             steps &#123;</span><br><span class="line">              // Get source code from github</span><br><span class="line">              git branch: "$&#123;params.BRANCH&#125;", credentialsId: 'xxxxxx', url: 'https://github.com/xxxxx-dev/xxxxxx-frontend'</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         stage('npm install') &#123;</span><br><span class="line">             steps &#123;</span><br><span class="line">               sh "npm install"</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">        stage('npm build') &#123;</span><br><span class="line">            steps &#123;</span><br><span class="line">                sh "npm run dev"</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">	    stage('Deploy') &#123;</span><br><span class="line">	         steps &#123;</span><br><span class="line">	          sh "aws s3 rm s3://xxxxxx/web/ --recursive"</span><br><span class="line">              sh "aws s3 cp dist/ s3://xxxxxxx/web/ --recursive"</span><br><span class="line">              sh "aws cloudfront create-invalidation --distribution-id xxxxxxxxx --paths '/*'"</span><br><span class="line">	        &#125;</span><br><span class="line">	    &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Task-Definition-File"><a href="#Task-Definition-File" class="headerlink" title="Task Definition File"></a>Task Definition File</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  "family": "xxxxxx",</span><br><span class="line">  "networkMode": "awsvpc",</span><br><span class="line">  "taskRoleArn": "arn:aws:iam::xxxxxx:role/xxxxx-jenkins",</span><br><span class="line">  "executionRoleArn": "arn:aws:iam::xxxxxx:role/xxxxxxx-jenkins",</span><br><span class="line">  "cpu": "1024",</span><br><span class="line">  "memory": "2048",</span><br><span class="line">  "placementConstraints": [],</span><br><span class="line">  "volumes": [],</span><br><span class="line">  "requiresCompatibilities": [</span><br><span class="line">    "FARGATE"</span><br><span class="line">  ],</span><br><span class="line">  "containerDefinitions": [</span><br><span class="line">    &#123;</span><br><span class="line">      "memoryReservation": 128,</span><br><span class="line">      "name": "xxxxxxx",</span><br><span class="line">      "mountPoints": [],</span><br><span class="line">      "image": "xxxxxxx.dkr.ecr.ap-northeast-1.amazonaws.com/xxxxxxx:latest",</span><br><span class="line">      "essential": true,</span><br><span class="line">      "portMappings": [</span><br><span class="line">        &#123;</span><br><span class="line">          "protocol": "tcp",</span><br><span class="line">          "containerPort": 8080,</span><br><span class="line">          "hostPort": 8080</span><br><span class="line">        &#125;</span><br><span class="line">      ],</span><br><span class="line">      "logConfiguration": &#123;</span><br><span class="line">        "logDriver": "awslogs",</span><br><span class="line">        "options": &#123;</span><br><span class="line">          "awslogs-region": "ap-northeast-1",</span><br><span class="line">          "awslogs-stream-prefix": "xxxxxxx",</span><br><span class="line">          "awslogs-group": "/ecs/xxxxxx"</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      "memory": 2048,</span><br><span class="line">      "cpu": 1024,</span><br><span class="line">      "volumesFrom": []</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/AWS/" rel="tag"># AWS</a>
+          
+            <a href="/tags/EC2/" rel="tag"># EC2</a>
+          
+            <a href="/tags/Jenkins/" rel="tag"># Jenkins</a>
+          
+            <a href="/tags/CloudFront/" rel="tag"># CloudFront</a>
+          
+            <a href="/tags/S3/" rel="tag"># S3</a>
+          
+            <a href="/tags/ECS/" rel="tag"># ECS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/19/UIDatePickerCountdownFunction/" rel="next" title="UIDatePicker Countdown Function">
+                <i class="fa fa-chevron-left"></i> UIDatePicker Countdown Function
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Zhou Shuai</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AWS-EC2"><span class="nav-number">1.</span> <span class="nav-text">AWS EC2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Precondition"><span class="nav-number">1.1.</span> <span class="nav-text">Precondition:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Step"><span class="nav-number">1.2.</span> <span class="nav-text">Step:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CloudFront-S3"><span class="nav-number">2.</span> <span class="nav-text">CloudFront + S3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Precondition-1"><span class="nav-number">2.1.</span> <span class="nav-text">Precondition:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ECS"><span class="nav-number">3.</span> <span class="nav-text">ECS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Precondition-2"><span class="nav-number">3.1.</span> <span class="nav-text">Precondition:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Jenkins"><span class="nav-number">4.</span> <span class="nav-text">Jenkins</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Springboot-Pipline"><span class="nav-number">4.1.</span> <span class="nav-text">Springboot Pipline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frontend-Pipline"><span class="nav-number">4.2.</span> <span class="nav-text">Frontend Pipline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Task-Definition-File"><span class="nav-number">4.3.</span> <span class="nav-text">Task Definition File</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2023</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhou Shuai</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.4.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.4.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.4.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.4.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.4.1"></script>
+
+
+
+  
+
+  
+    <script id="dsq-count-scr" src="https://ishuai.disqus.com/count.js" async></script>
+  
+
+  
+    <script type="text/javascript">
+      var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2023/05/31/AWS-EC2-Jenkins-CloudFront-S3-ECS/';
+        this.page.identifier = '2023/05/31/AWS-EC2-Jenkins-CloudFront-S3-ECS/';
+        this.page.title = 'AWS EC2(Jenkins) + CloudFront + S3 + ECS';
+        };
+      function loadComments () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ishuai.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      }
+      
+        $(function () {
+          var offsetTop = $('#comments').offset().top - $(window).height();
+          if (offsetTop <= 0) {
+            // load directly when there's no a scrollbar
+            loadComments();
+          } else {
+            $(window).on('scroll.disqus_scroll', function () {
+              var scrollTop = document.documentElement.scrollTop;
+              if (scrollTop >= offsetTop) {
+                $(window).off('.disqus_scroll');
+                loadComments();
+              }
+            });
+          }
+        });
+      
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
